@@ -9,3 +9,52 @@
       system: no             # Defaults to no
       createhome: yes        # Defaults to yes
       home: /home/hillary  # Defaults to /home/<username>
+
+
+
+---
+- hosts: all 
+  vars:
+    username: Ivo 
+    password: class2020@2021
+  tasks:
+  - name: create users
+    user:  
+      name: "{{with_items}}" 
+      password: "{{password}}"
+      sate: present
+    with_items:
+      - {'username':'esia', 'password':'esia123'}
+      - {'username':'mercy','password':'domi2021'}
+      
+---
+- hosts: localhost 
+  become: true
+  tasks:
+  - name: create users
+    user:  
+      name: "{{items.username}}" 
+      password: "{{items.password}}"
+      create_home: ""
+      state: present
+    with_items:
+    - {'username':'esia', 'password': 'abc@123', 'homeDir': 'yes' }
+    - {'username':'Dominion', 'password': 'xyz@123', 'homeDir': 'yes' }
+    - {'username':'queen', 'password': 'abc@789', 'homeDir': 'no' }
+    
+---
+- hosts: all 
+  become: true 
+  tasks: 
+  - name: copy files 
+    copy: 
+      src: "{{items.src}}"
+      dest: "{{items.dst}}"
+      owner: "{{items.owner}}"
+    with_items:
+    - {'src': '/home/ansible/deploy.py', 'dst': /tmp/deploy.py, 'owner': 'ansible' }
+    - {'src': '/home/ansible/monitore.py', 'dst': /opt/monitore.py, 'owner': 'esia' }
+    - {'src': '/home/ansible/user.sh', 'dst': /opt/user.py, 'owner': 'mercy' }
+    
+    
+  
