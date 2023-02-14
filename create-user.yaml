@@ -22,7 +22,7 @@
     user:  
       name: "{{with_items}}" 
       password: "{{password}}"
-      sate: present
+      state: present
     with_items:
       - {'username':'esia', 'password':'esia123'}
       - {'username':'mercy','password':'domi2021'}
